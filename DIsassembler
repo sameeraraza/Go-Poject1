@@ -1,0 +1,93 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+)
+
+type Instruction struct {
+	typeofInstruction string
+	rawInstruction    string
+	linevalue         uint64
+	programCnt        int
+	opcode            uint64
+	op                string
+	rd                uint8
+	rn                uint8
+	rm                uint8
+	im                string
+}
+
+//func GetInstruction()  {
+
+// open input file
+//	infile, err := os.Open("test2_bin.txt")
+//	if err != nil {
+//		panic(err)
+//	}
+
+//	defer func() {
+//		if err := infile.Close(); err != nil {
+//			panic(err)
+//		}
+//	}()
+
+//	scanner := bufio.NewScanner(infile)
+//
+//	InputParsed := []Instruction{}
+
+//	for scanner.Scan() {
+//	InputParsed = append(InputParsed, GetInstruction(scanner.Text()))
+//	}
+
+//for _, line := range InputParsed {
+//		linevalue, _ := strconv.ParseUint(line.rawInstruction, 2, 32)
+//		fmt.Println(linevalue)
+
+//	}
+
+//	return Instruction{}
+//}
+
+func getInstruction() {
+	// open input file
+	infile, err := os.Open("test2_bin.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	defer func() {
+		if err := infile.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	scanner := bufio.NewScanner(infile)
+
+	InputParsed := []Instruction{}
+
+	for scanner.Scan() {
+		ns := Instruction{rawInstruction: scanner.Text()}
+		InputParsed = append(InputParsed, ns)
+		fmt.Println(InputParsed)
+
+	}
+
+	// we have to put the binary in an array
+	// take slices for each opcode 0 -11
+	// linevalue, _ := strconv.ParseUint(line.rawInstruction, 2, 11)
+	// if opcode == 1968
+	// fmt.Println("LDUR")
+
+	for _, line := range InputParsed {
+		linevalue, _ := strconv.ParseUint(line.rawInstruction, 2, 32)
+		fmt.Println(linevalue)
+
+	}
+}
+
+func main() {
+	getInstruction()
+}
