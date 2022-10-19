@@ -2,92 +2,148 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
-	"strconv"
 )
 
 type Instruction struct {
 	typeofInstruction string
 	rawInstruction    string
-	linevalue         uint64
+	linevalue         int32
 	programCnt        int
-	opcode            uint64
+	opcode            uint32
 	op                string
 	rd                uint8
 	rn                uint8
 	rm                uint8
-	im                string
+	im                int32
+	shamt             uint16
+	shfcd             uint8
+	field             uint32
+	addr              uint16
+	offset            int32
+	data              int32
 }
 
-//func GetInstruction()  {
-
-// open input file
-//	infile, err := os.Open("test2_bin.txt")
-//	if err != nil {
-//		panic(err)
-//	}
-
-//	defer func() {
-//		if err := infile.Close(); err != nil {
-//			panic(err)
-//		}
-//	}()
-
-//	scanner := bufio.NewScanner(infile)
-//
-//	InputParsed := []Instruction{}
-
-//	for scanner.Scan() {
-//	InputParsed = append(InputParsed, GetInstruction(scanner.Text()))
-//	}
-
-//for _, line := range InputParsed {
-//		linevalue, _ := strconv.ParseUint(line.rawInstruction, 2, 32)
-//		fmt.Println(linevalue)
-
-//	}
-
-//	return Instruction{}
-//}
-
-func getInstruction() {
-	// open input file
-	infile, err := os.Open("test2_bin.txt")
-	if err != nil {
-		panic(err)
-	}
-
-	defer func() {
-		if err := infile.Close(); err != nil {
-			panic(err)
-		}
-	}()
-
-	scanner := bufio.NewScanner(infile)
+func initialScan() {
 
 	InputParsed := []Instruction{}
+	scanner := bufio.NewScanner(infile)
 
 	for scanner.Scan() {
 		ns := Instruction{rawInstruction: scanner.Text()}
 		InputParsed = append(InputParsed, ns)
-		fmt.Println(InputParsed)
 
 	}
 
-	// we have to put the binary in an array
-	// take slices for each opcode 0 -11
-	// linevalue, _ := strconv.ParseUint(line.rawInstruction, 2, 11)
-	// if opcode == 1968
-	// fmt.Println("LDUR")
-
-	for _, line := range InputParsed {
-		linevalue, _ := strconv.ParseUint(line.rawInstruction, 2, 32)
-		fmt.Println(linevalue)
-
+	if err := scanner.Err(); err != nil {
+		fmt.Println(err)
 	}
+
 }
+
+for idx,s:= range InputParsed
+{
+linevalue,err:=strconv.ParseUint(s.RawInstruction, base 2, bitSize 32)
+InputParsed[idx].linevalue = uint32(linevalue)
+InputParsed[idx].programCnt=programCnt
+if err != nil {
+fmt.Println( " input = \""+s.RawInstruction +"\"")
+fmt.Printlna(error)
+
+}
+
+InputParsed[idx].opcode=uint32(linevalue)>>21
+}
+for idx, s:=range InputParsed{
+fmt.Println(opcode)
+InputParsed[idx].programCnt = programCnt
+switch
+{    var  Breaknow = false
+
+case s.opcode == 8 && Breaknow== false:
+fmt.Println("A NOP was discovered")
+InputParsed.op="NOP"
+tempString:= NOP(InputParsed[idx])
+fmt.Println(tempString)
+fmt.FprintF(outfile, tempString)
+case s.opcode ==2038 && Breaknow == false:
+if(s.linevalue & 0x1FFFFF)==0x1EFFE7{
+fmt.Println("The break was just discovered")
+InputParsed[idx].op = "BREAK"
+Breaknow = true
+tempString:=BREAK(InputParsed[idx])
+fmt.Println(tempString)
+fmt.FprintF(outfile, tempString)
+break
+}
+case s.opcode >= 160 && s.opcode <= 191 && Breaknow == false: {
+	fmt.Println("Found a B Instruction")
+	InputParsed[idx].op = "B"
+	InputParsed[idx].offset
+
+}
+case s.opcode==1112|| s.opcode==1624||s.opcode==1184||s.opcode==1369||s.opcode==1872 || (s.opcode>=1690&&s.opcode<=1693)&&Breaknow == false{
+fmt.Println("Found an R type or R shift Instruction")
+if{
+	s.opcode==112{
+		InputParsed[idx].op="ADD"
+} else if s.opcode ==1624{
+InputParsed[idx].op="SUB"
+}else if s.opcode ==1104{
+InputParsed[idx].op="AND"
+}else if s.opcode == 1369{
+InputParsed[idx].op="ORR"
+}else if s.opcode ==1872{
+InputParsed[idx].op="EOR"
+}else if s.opcode ==1698{
+InputParsed[idx].op="LSR"{
+	IndexParsed[index].shamt=uint16((s.linevalue>>18)&8x3F)
+}
+}
+
+}
+
+
+}
+
+
+
+}
+
+}
+
 
 func main() {
-	getInstruction()
+    var InputFileName string
+	var outputFileName string
+	var programCnt int
+	programCnt = 96
+	flag.StringVar(&InputFileName,  " i", "", "Gets Input file")
+	flag.StringVar(&outputFileName,"0", "" ," Gets output file")
+	flag.Parse()
+	if flag.NArg()!=9{
+		os.Exit(-1)
+	}
+	infile,err:=os.OpenFile("dtest2_bin", os.O_RDONLY,filePermissions)
+	if err != nil{
+		fmt.Println(" Error. Unable to open file")
+	} else {
+		fmt.Println("\n# input file" + InputFileName)
+
+	}
+	defer infile.Close()
+	outputFileName = outputFileName + "_dis.txt"
+	outfile,err:=os.OpenFile("outputFileName",os.O_RDONLY,filePermission)
+	if err!=nil{
+		if outputFileName!=""{
+			fmt.Println(err)
+			fmt.Println("Outputting to standard output")
+		}
+		outfile = os.Stdout
+
+	}
+	initialScan()
 }
+
